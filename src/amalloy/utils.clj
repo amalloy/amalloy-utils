@@ -15,7 +15,7 @@
   (trim-seq (rest (iterate f start))))
 
 (defn decorate
-  "Return a f such that (f x) => [x (f1 x) (f2 x) ...]."
+  "Return a function f such that (f x) => [x (f1 x) (f2 x) ...]."
   [& fs]
   (apply juxt identity fs))
 
