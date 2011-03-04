@@ -12,6 +12,6 @@ identity)."
        (if (pred x) (f x) (f-not x)))))
 
 ;; coerce objects to various types
-(def make-str (transform-if keyword? name str))
+(def make-str (transform-if #(instance? clojure.lang.Named %) name str))
 (def make-kw keyword)
 (def make-int (transform-if string? #(Integer/parseInt %)))
