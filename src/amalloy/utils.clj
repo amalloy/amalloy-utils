@@ -1,18 +1,23 @@
-(ns amalloy.utils)
+(ns amalloy.utils
+  (:use [clojure.contrib.def :only [defalias]]))
 
-(def ^{:arglists (:arglists (meta #'complement))}
-  ! complement)
+(defalias ! complement)
+
+;; TODO why is this extra ' needed!?!
+(defmacro defcomp [name doc args & fs]
+  (let [fnmeta {:doc doc :arglists `'(~args)}]
+    `(def ~(with-meta name fnmeta) (comp ~@fs))))
 
 (defn trim-seq "Trim a sequence at the first nil element"
   [s]
   (take-while (complement nil?) s))
 
-(defn iterations
+(defcomp iterations
   "Return a sequence of (f start), (f (f start))...until nil is
   encountered. Like clojure.core/iterate, but doesn't include the
   original element and doesn't go on forever."
   [f start]
-  (trim-seq (rest (iterate f start))))
+  trim-seq rest iterate)
 
 (defn decorate
   "Return a function f such that (f x) => [x (f1 x) (f2 x) ...]."
@@ -40,3 +45,10 @@
 (defn validator
   [pred]
   (partial verify pred))
+
+(defn invoke
+  "Like clojure.core/apply, but doesn't expand/splice the last
+argument."
+  ([f] (f))
+  ([f x] (f x))
+  ([f x & more] (apply f x more)))
