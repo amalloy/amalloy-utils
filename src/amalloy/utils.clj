@@ -8,6 +8,11 @@
   (let [fnmeta {:doc doc :arglists `'(~args)}]
     `(def ~(with-meta name fnmeta) (comp ~@fs))))
 
+(defn iterate-until
+  [pred f start]
+  (take-while (complement pred)
+              (iterate f start)))
+
 (defn trim-seq "Trim a sequence at the first nil element"
   [s]
   (take-while (complement nil?) s))
