@@ -32,6 +32,7 @@ myconst 10)."
             [f 'test] [y 1 2 3]) expands into two partials."
   ([macro-args body & args]
      `(anon-macro [arg#]
-                  (for [~macro-args arg#]
-                    ~body)   ; (cons 'do) already supplied by macrolet
+                  (cons 'do
+                        (for [~macro-args arg#]
+                          ~body))
                   ~(partition-params macro-args args))))
