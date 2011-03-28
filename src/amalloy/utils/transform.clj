@@ -29,9 +29,10 @@ identity)."
          #{:asc :ascending +} f))))
 
 
-
-
-
-
-
-
+(defmacro with-adjustments
+  "Create new bindings for binding args, by applying adjustment
+  function to current values of bindings."
+  [adjustment bindings & body]
+  (let [bindings (vec bindings)]
+    `(let [~bindings (map ~adjustment ~bindings)]
+       ~@body)))
