@@ -4,7 +4,7 @@
 (defn- partition-params [argvec actual-args]
   (if (some #{'&} argvec)
     [actual-args] ; one seq with all args
-    (partition (count argvec) actual-args)))
+    (vec (map vec (partition (count argvec) actual-args)))))
 
 (defmacro anon-macro
   "Define, and then immediately use, an anonymous macro. For
@@ -12,7 +12,7 @@ example, (anon-macro [x y] `(def ~x ~y) myconst 10) expands to (def
 myconst 10)."
   ([args macro-body & body]
      `(macrolet [(name# ~args ~macro-body)]
-                (name# ~@body))))
+        (name# ~@body))))
 
 (defmacro macro-do
   "Wrap a list of forms with an anonymous macro, which partitions the
@@ -32,7 +32,7 @@ myconst 10)."
             [f 'test] [y 1 2 3]) expands into two partials."
   ([macro-args body & args]
      `(anon-macro [arg#]
-                  (cons 'do
-                        (for [~macro-args arg#]
-                          ~body))
-                  ~(partition-params macro-args args))))
+        (cons 'do
+              (for [~macro-args arg#]
+                ~body))
+        ~(partition-params macro-args args))))
