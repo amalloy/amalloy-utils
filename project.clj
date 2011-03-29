@@ -1,4 +1,4 @@
-(defproject amalloy/utils "0.3.2"
+(defproject amalloy/utils "0.3.3"
   :description "A collection of handy-dandy tools I've collected as I notice repeated patterns in my Clojure code"
   :dependencies [[clojure "1.2.1"]
                  [clojure-contrib "1.2.0"]]
