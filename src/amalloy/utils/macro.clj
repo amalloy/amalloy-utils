@@ -1,5 +1,14 @@
 (ns amalloy.utils.macro
-  (:use clojure.contrib.macro-utils))
+  (:use [clojure.contrib.macro-utils :only [macrolet]]
+        [amalloy.utils.transform :only [transform-if]]
+        [clojure.walk :only [postwalk]]))
+
+(defn macro-data
+  "Walk a collection turning all list/sequential items into
+vectors. Use this on things that you want included in a macroexpansion
+as data, not as code."
+  [coll]
+  (postwalk (transform-if seq? vec) coll))
 
 (defn- partition-params [argvec actual-args]
   (if (some #{'&} argvec)
