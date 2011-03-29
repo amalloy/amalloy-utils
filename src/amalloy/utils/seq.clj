@@ -37,7 +37,7 @@ Next and done? are functions that operate on a seed. next should
      (unfold next (constantly false) seed))
   ([next done? seed]
      (lazy-loop [seed seed]
-                (when-not (done? seed)
-                  (let [[value new-seed] (next seed)]
-                    (cons value
-                          (lazy-recur new-seed)))))))
+       (when-not (done? seed)
+         (let [[value new-seed] (next seed)]
+           (cons value
+                 (lazy-recur new-seed)))))))
