@@ -32,7 +32,6 @@ Next and done? are functions that operate on a seed. next should
   (defn fibs []
     (unfold (fn [[a b]]
               [a [b (+ a b)]])
-            (constantly false)
             [0 1]))"
   ([next seed]
      (unfold next (constantly false) seed))
