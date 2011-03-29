@@ -15,7 +15,7 @@
 
 (defn trim-seq "Trim a sequence at the first nil element"
   [s]
-  (take-while (complement nil?) s))
+  (take-while (! nil?) s))
 
 (defcomp iterations
   "Return a sequence of (f start), (f (f start))...until nil is
@@ -30,7 +30,7 @@
   (apply juxt identity fs))
 
 (defn annotate
-  "A vector of [x (f1 x) (f2 x)]."
+  "A vector of [x (f1 x) (f2 x) ...]."
   [x & fs]
   ((apply decorate fs) x))
 

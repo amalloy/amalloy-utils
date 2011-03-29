@@ -3,5 +3,6 @@
   :dependencies [[clojure "1.2.1"]
                  [clojure-contrib "1.2.0"]]
   :dev-dependencies [[org.clojars.gjahad/swank-clojure "1.3.1.1-SNAPSHOT"]
-                     [clojure-source "1.2.1"]] ; 1.2, or what project wants
+                     [clojure-source "1.2.1"]
+                     [clj-stacktrace "0.2.0"]]
   :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"])
