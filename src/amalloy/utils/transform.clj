@@ -10,7 +10,7 @@ identity)."
        (if (pred x) (f x) x)))
   ([pred f f-not]
      (fn [x]
-       (if (pred x) (f x) (f-not x)))))
+       ((if (pred x) f f-not) x))))
 
 ;; coerce objects to various types
 (def make-str (transform-if #(instance? clojure.lang.Named %) name str))
