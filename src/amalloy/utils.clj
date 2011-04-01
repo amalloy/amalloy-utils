@@ -64,3 +64,9 @@ argument."
   ([f] (f))
   ([f x] (f x))
   ([f x & more] (apply f x more)))
+
+(defn rand-in-range
+  ([] (rand-in-range 0 2))
+  ([end] (rand-in-range 0 end))
+  ([start end]
+   (+ start (rand-int (- end start)))))
