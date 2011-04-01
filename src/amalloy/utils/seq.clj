@@ -44,3 +44,27 @@
          (let [[value new-seed] (next seed)]
            (cons value
                  (lazy-recur new-seed)))))))
+
+(defn take-shuffled
+  "Lazily take (at most) n elements at random from coll, without
+  replacement. For n=1, this is equivalent to rand-nth; for n>=(count
+  coll) it is equivalent to shuffle.
+
+  Clarification of \"without replacement\": each index in the original
+  collection is chosen at most once. Thus if the original collection
+  contains no duplicates, neither will the result of this
+  function. But if the original collection contains duplicates, this
+  function may include them in its output: it does not do any
+  uniqueness checking aside from being careful not to use the same
+  index twice."
+  [n coll]
+  (lazy-loop [n n, coll (vec coll)]
+    (when (and (pos? n)
+               (seq coll))
+      (let [idx (rand-int (count coll))
+            val (coll idx)
+            coll (-> coll
+                     (assoc idx (peek coll))
+                     pop)]
+        (cons val
+              (lazy-recur (dec n) coll))))))
