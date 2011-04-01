@@ -20,15 +20,18 @@
       ~@values)))
 
 (defn unfold
-  "Traditionally unfold is the 'opposite of reduce': it turns a single seed value into a (possibly infinite) lazy sequence of output values.
+  "Traditionally unfold is the 'opposite of reduce': it turns a single
+  seed value into a (possibly infinite) lazy sequence of output
+  values.
 
-Next and done? are functions that operate on a seed. next should
+  Next and done? are functions that operate on a seed. next should
   return a pair, [value new-seed]; the value half of the pair is
   inserted into the resulting list, while the new-seed is used to
   continue unfolding. Notably, the value is never passed as an
   argument to either next or done?.
 
-  If done? is omitted, the sequence will be unfolded forever, for example
+  If done? is omitted, the sequence will be unfolded forever, for
+  example
   (defn fibs []
     (unfold (fn [[a b]]
               [a [b (+ a b)]])

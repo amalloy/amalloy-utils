@@ -14,25 +14,25 @@
 ;; the expansion context: orig (original vector), acc (result
 ;; accumulator), a/b (swap indexes)
 (macro-do
- [class how]
- `(defmethod permute ~class [swaps# ~'orig]
-             (reduce (fn ~'[acc [a b]]
-                       ~how)
-                     ~'orig swaps#))
- ;; Interpret maps as a set of swaps to make: {0 2} and {2 0} both mean
- ;; to swap positions 0 and 2
- clojure.lang.IPersistentMap
- (assoc acc
-   a (orig b)
-   b (orig a))
+  [class how]
+  `(defmethod permute ~class [swaps# ~'orig]
+     (reduce (fn ~'[acc [a b]]
+               ~how)
+             ~'orig swaps#))
+  ;; Interpret maps as a set of swaps to make: {0 2} and {2 0} both mean
+  ;; to swap positions 0 and 2
+  clojure.lang.IPersistentMap
+  (assoc acc
+    a (orig b)
+    b (orig a))
 
- ;; Vectors are like maps, but one-way instead of two-way: [[0 2] [2
- ;; 0]] is the same as {0 2} for maps, but [[0 2]] copies the 0th
- ;; parameter into the 2nd slot WITHOUT CHANGING the 0th slot. This
- ;; allows more flexible reordering if the map/swap methodology is too
- ;; rigid
- clojure.lang.IPersistentVector
- (assoc acc b (orig a)))
+  ;; Vectors are like maps, but one-way instead of two-way: [[0 2] [2
+  ;; 0]] is the same as {0 2} for maps, but [[0 2]] copies the 0th
+  ;; parameter into the 2nd slot WITHOUT CHANGING the 0th slot. This
+  ;; allows more flexible reordering if the map/swap methodology is too
+  ;; rigid
+  clojure.lang.IPersistentVector
+  (assoc acc b (orig a)))
 
 ;; permute +1 turns (rotated 1 2 3) into (original 3 1 2)
 ;; permute -1 turns (rotated 1 2 3) into (original 2 3 1)
