@@ -17,20 +17,6 @@
   [s]
   (take-while (! nil?) s))
 
-(defcomp iterations
-  "Return a sequence of (f start), (f (f start))...until nil is
-  encountered. Like clojure.core/iterate, but doesn't include the
-  original element and doesn't go on forever."
-  [f start]
-  trim-seq rest iterate)
-
-(defcomp ffilter
-  "Like clojure.core/some, but instead of returning (pred x) for the
-  matching element x, it returns x. Useful for predicates that return
-  true/false instead of their argument."
-  [pred coll]
-  first filter)
-
 (defn decorate
   "Return a function f such that (f x) => [x (f1 x) (f2 x) ...]."
   [& fs]

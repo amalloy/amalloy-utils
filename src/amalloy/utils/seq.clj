@@ -2,6 +2,20 @@
   (:use amalloy.utils
         [clojure.walk :only [postwalk-replace]]))
 
+(defcomp iterations
+  "Return a sequence of (f start), (f (f start))...until nil is
+  encountered. Like clojure.core/iterate, but doesn't include the
+  original element and doesn't go on forever."
+  [f start]
+  trim-seq rest iterate)
+
+(defcomp ffilter
+  "Like clojure.core/some, but instead of returning (pred x) for the
+  matching element x, it returns x. Useful for predicates that return
+  true/false instead of their argument."
+  [pred coll]
+  first filter)
+
 (defmacro lazy-loop
   "Provide a simplified version of lazy-seq to eliminate
   boilerplate. Arguments are as to the built-in (loop...recur),
@@ -58,13 +72,13 @@
   uniqueness checking aside from being careful not to use the same
   index twice."
   [n coll]
-  (lazy-loop [n n, coll (vec coll)]
-    (when (and (pos? n)
-               (seq coll))
-      (let [idx (rand-int (count coll))
-            val (coll idx)
-            coll (-> coll
-                     (assoc idx (peek coll))
-                     pop)]
-        (cons val
-              (lazy-recur (dec n) coll))))))
+  (let [coll (vec coll)
+        n (min n (count coll))]
+    (take n
+          (lazy-loop [coll coll]
+            (let [idx (rand-int (count coll))
+                  val (coll idx)
+                  coll (-> coll
+                           (assoc idx (peek coll))
+                           pop)]
+              (cons val (lazy-recur coll)))))))
