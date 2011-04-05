@@ -10,7 +10,7 @@
 
 (defn iterate-until
   [pred f start]
-  (take-while (complement pred)
+  (take-while (! pred)
               (iterate f start)))
 
 (defn trim-seq "Trim a sequence at the first nil element"
