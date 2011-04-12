@@ -56,3 +56,10 @@ argument."
   ([end] (rand-in-range 0 end))
   ([start end]
    (+ start (rand-int (- end start)))))
+
+(defn update
+  [m [& keys] f & args]
+  (reduce (fn [m k]
+            (apply update-in m [k] f  args))
+          m keys))
+
