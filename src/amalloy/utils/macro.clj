@@ -38,7 +38,10 @@ myconst 10)."
   (macro-do [[f & args]]
             `(def ~(symbol (str \"basic-\" f))
                (partial ~f ~@args))
-            [f 'test] [y 1 2 3]) expands into two partials."
+            [f 'test] [y 1 2 3])
+  expands into (do
+                 (def basic-f (partial f 'test))
+                 (def basic-y (partial y 1 2 3)))"
   ([macro-args body & args]
      `(anon-macro [arg#]
         (cons 'do

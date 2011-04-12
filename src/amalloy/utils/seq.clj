@@ -16,6 +16,19 @@
   [pred coll]
   first filter)
 
+(defn alternates
+  "Split coll into 'threads' subsequences (defaults to 2), feeding
+each alternately from the input sequence. Effectively the inverse of
+interleave:
+
+    (alternates 3 (range 9))
+;=> ((0 3 6) (1 4 7) (2 5 8))"
+  ([coll] (alternates 2 coll))
+  ([threads coll]
+   (for [offset (range threads)]
+     (take-nth threads
+               (drop offset coll)))))
+
 (defmacro lazy-loop
   "Provide a simplified version of lazy-seq to eliminate
   boilerplate. Arguments are as to the built-in (loop...recur),
@@ -25,8 +38,7 @@
   when not in the tail position."
   [bindings & body]
   (let [inner-fn 'lazy-recur
-        names (take-nth 2 bindings)
-        values (take-nth 2 (rest bindings))]
+        [names values] (alternates bindings)]
     `((fn ~inner-fn
         ~(vec names)
         (lazy-seq
