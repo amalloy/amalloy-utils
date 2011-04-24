@@ -35,7 +35,8 @@
                 vars)))
 
 (defn verify
-  "Return x, unless (pred x) is logical false, in which case return nil."
+  "Return x, unless (pred x) is logical false, in which case return
+nil."
   [pred x]
   (when (pred x)
     x))
@@ -52,7 +53,27 @@ argument."
   ([f x & more] (apply f x more)))
 
 (defn rand-in-range
+  "Produce a random integer in the range [start, end)."
   ([] (rand-in-range 0 2))
   ([end] (rand-in-range 0 end))
   ([start end]
    (+ start (rand-int (- end start)))))
+
+(defn update
+  "Like update-in, but interpret keys as a set of top-level keys which
+  should be modified by applying f to them, rather than a seq of keys
+  indicating how to drill down into the target map. For example,
+  (update {:a 1 :b 2} [:a :b] inc) yields {:a 2 :b 3}."
+  [m [& keys] f & args]
+  (reduce (fn [m k]
+            (apply update-in m [k] f args))
+          m keys))
+
+(defalias foldl reduce)
+(defn foldr [f start coll]
+  (foldl #(f %2 %1) start (reverse coll)))
+
+(comment
+  (foldl + 0 [1 2 3 4]) => (+ (+ (+ (+ 0 1) 2) 3) 4)
+  (foldr + 0 [1 2 3 4]) => (+ 1 (+ 2 (+ 3 (+ 4 0))))
+)
