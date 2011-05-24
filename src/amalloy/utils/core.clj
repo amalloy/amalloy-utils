@@ -2,7 +2,11 @@
   (:use amalloy.utils
         (amalloy.utils [seq :only [lazy-loop]])))
 
-(defmacro cond* [& clauses]
+(defmacro cond+
+  "Like cond, but allowing bracketed [test expr] pairs to be grouped
+  together, as required in common lisp, for cases in which that
+  improves readability."
+  [& clauses]
   (cons `cond
         (lazy-loop [[test & [expr & more :as all]] clauses]
           (when test
@@ -11,6 +15,21 @@
                       (lazy-recur all))
               (concat [test expr]
                       (lazy-recur more)))))))
+
+(defmacro let+
+  "Like let, but allowing (binding expr) pairs to be grouped together,
+  as required in common lisp, for cases in which that improves
+  readability."
+  [clauses & body]
+  `(let ~(vec 
+          (lazy-loop [[test & [expr & more :as all]] clauses]
+            (when test
+              (if (seq? test)
+                (concat test
+                        (lazy-recur all))
+                (concat [test expr]
+                        (lazy-recur more))))))
+     ~@body))
 
 (comment
   (cond*
