@@ -94,3 +94,9 @@ interleave:
                            (assoc idx (peek coll))
                            pop)]
               (cons val (lazy-recur coll)))))))
+
+(defn remove-once
+  "Remove from coll first element which satisfies pred."
+  [pred coll]
+  (let [[before [x & after]] (split-with (complement pred) coll)]
+    (concat before after)))
